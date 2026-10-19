@@ -26,6 +26,6 @@ jobs:
       fail-fast: false
       matrix:
         language: [python, actions]
-    uses: NDDev-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@66fc19d6ee02c703bc219aa4f31d5f98a3def54b # 0.1.10
+    uses: NDDev-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@d92026cf31a10a0eeaa532e1f323c7cfdfbfac5b # 0.1.29
     with:
       languages: '["${{ matrix.language }}"]'

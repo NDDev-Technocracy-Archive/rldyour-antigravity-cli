@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-    uses: NDDev-OpenNetwork/ci-workflows/.github/workflows/cross-platform-smoke.yml@66fc19d6ee02c703bc219aa4f31d5f98a3def54b # 0.1.10
+    uses: NDDev-OpenNetwork/ci-workflows/.github/workflows/cross-platform-smoke.yml@d92026cf31a10a0eeaa532e1f323c7cfdfbfac5b # 0.1.29
     with:
       os_list: '["${{ matrix.os }}"]'
       command: python3 scripts/validate_gemini_config.py --strict
