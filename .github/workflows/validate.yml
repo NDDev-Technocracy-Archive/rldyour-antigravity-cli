@@ -17,11 +17,13 @@ concurrency:
 jobs:
   validate:
     name: Validate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -30,3 +32,30 @@ jobs:
         run: python3 -m pip install --user pytest pytest-cov
       - name: Validate Gemini adapter
         run: scripts/validate_fast.sh
+
+  workflows:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: NDDev-Technocracy-Standarts/std-0004-ci-cd-workflows/.github/actions/tools@ab62f45b2a3067e5a7425d703f7fd07f1618b72c # nddev-cicd-v0.6.14
+        with:
+          capability: security
+      - name: Lint and audit workflows
+        run: |
+          actionlint
+          zizmor --offline --no-progress .github/workflows/validate.yml .github/workflows/archive-hygiene.yml .github/workflows/cross-platform.yml .github/workflows/dependency-check.yml .github/workflows/pytest.yml .github/workflows/security.yml .github/dependabot.yml
+      - name: Scan new pull request commits, or the full history on main
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ -n "$BASE" ]; then
+            gitleaks git --no-banner --redact --log-opts="$BASE..$HEAD" .
+          else
+            gitleaks git --no-banner --redact .
+          fi
+
