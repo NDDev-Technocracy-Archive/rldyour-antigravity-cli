@@ -69,18 +69,19 @@ background, headless, daemon, or detached orchestrator processes.
 Run repository-local validators for changed scope. Do not fake green checks.
 Installed-runtime checks are optional and require explicit local authentication.
 
-## CI runner selection
+## CI validation boundary
 
-Every workflow run is evidence and must finish. Use a concurrency group unique
-to `github.run_id` and `cancel-in-progress: false`; never discard a queued or
-running check as superseded.
+Use `just setup` to prepare the locked CI group and `just check` for offline
+source checks. `just test` runs the existing adapter validators, bounded hook
+smoke and pytest coverage; `just verify` retains the additional memory,
+Python compilation and archive hygiene gates. Those workloads run in CI.
 
-This repository is public, so `pull_request` executes untrusted fork code.
-Every caller of a `NDDev-OpenNetwork/ci-workflows` reusable that exposes a `runner`
-input passes `runner: ubuntu-latest` explicitly, and must keep it. Several of
-those reusables may default `runner` to the retired `amsterdam` label, and
-that default is a property of the **pinned commit**, not of this
-repository - so dropping the explicit value would let a routine pin bump route
-fork PRs onto trusted private infrastructure with no diff here to review. On
-any ci-workflows pin bump, diff `inputs.runner.default` between the old and
-new commit before merging.
+The shared source workflow validates Linux, macOS and Windows configuration
+on public hosted workers. Its SDK inputs and tool manifest own exact CI
+versions. Existing CodeQL, Scorecard and dependency review remain independent.
+The release publisher stays separate and is not activated by source admission.
+
+Every workflow run is evidence and must finish. Concurrency groups use
+`github.run_id` with `cancel-in-progress: false`. Public untrusted code stays
+on public workers. Do not set `RLDYOUR_VALIDATE_LIVE_ANTIGRAVITY=1` for source
+validation; authenticated runtime checks require the owner's explicit scope.

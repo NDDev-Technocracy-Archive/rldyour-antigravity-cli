@@ -5,14 +5,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '31 4 * * *'
 
 permissions:
   contents: read
 
 concurrency:
-  group: security-${{ github.event.pull_request.number || github.ref }}
-  # Obsolete pull-request heads are cancelled; a running main validation always completes.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: security-${{ github.run_id }}
+  cancel-in-progress: false
 
 jobs:
   codeql:
@@ -65,3 +66,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+
+  daily:
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: NDDev-Technocracy-OpenNetwork/nddev-ci/.github/workflows/security.yml@d7a4abb010a0cc85967fa09267b100fc90412981 # v0.6.64
+    with:
+      hosted-runner: ubuntu-24.04
