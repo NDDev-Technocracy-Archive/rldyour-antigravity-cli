@@ -235,23 +235,19 @@ legacy runtime support is retired for active use in this adapter. See
 
 ## Validation
 
-Static validation (no runtime required):
+Prepare and check the repository without an installed Antigravity runtime:
 
-```bash
-python3 scripts/validate_gemini_config.py --strict
-python3 scripts/validate_gemini_extension_manifest.py --strict
-python3 scripts/validate_gemini_commands.py --strict
-python3 scripts/validate_gemini_skills.py --strict
-python3 scripts/validate_gemini_subagents.py --strict
-python3 scripts/validate_gemini_hooks.py --strict
-python3 scripts/validate_gemini_mcp_inventory.py --strict
-python3 scripts/validate_gemini_browser_routing.py --strict
-python3 scripts/validate_gemini_runtime_baseline.py --strict
-python3 scripts/validate_instruction_docs.py --strict
-python3 scripts/validate_serena_memory_schema.py --strict
-python3 scripts/validate_serena_memory_semantics.py --strict
-python3 -m pytest -q
-```
+~~~bash
+just setup
+just check
+~~~
+
+Run the existing validators, hook smoke and pytest coverage with `just test`.
+`just verify` also checks release readiness and source archive hygiene.
+The CI dependency group in `pyproject.toml` and `uv.lock` owns validation
+dependencies; the source workflow selects the exact compatible Python SDK.
+Linux, macOS and Windows configuration smoke use `just check-config`.
+These checks do not prove authenticated runtime or MCP connectivity.
 
 Installed-runtime smoke checks (optional; require a deliberately configured
 owner machine with valid authentication):

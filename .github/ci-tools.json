@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "repository": "rhysd/actionlint",
+      "asset": 384924896,
+      "tag": "v1.7.12",
+      "name": "actionlint_1.7.12_linux_amd64.tar.gz",
+      "file": "actionlint_1.7.12_linux_amd64.tar.gz",
+      "size": 2353908,
+      "sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8",
+      "members": [
+        {
+          "path": "actionlint",
+          "file": "actionlint",
+          "size": 6074530,
+          "sha256": "c872d6db8c6bf83a8eaa704fc93999f027d55dffbc63b8a6abdccb47df5f4cd4",
+          "executable": true
+        }
+      ]
+    }
+  ]
+}
